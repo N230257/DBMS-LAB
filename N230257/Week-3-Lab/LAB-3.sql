@@ -1,10 +1,10 @@
 USE gram_panchayat_db;
 SHOW TABLES;
-SELECT * FROM citizen;
+SELECT * FROM citizen_details;
 SELECT * FROM certificate_application;
 SELECT * FROM certificate_type;
 SELECT * FROM panchayat_office;
-DESC citizen;
+DESC citizen_details;
 DESC certificate_type;
 DESC panchayat_office;
 DESC certificate_application;
@@ -40,7 +40,7 @@ DROP COLUMN certificate_name;
 ALTER TABLE certificate_application
 ADD CONSTRAINT fk_citizen
 FOREIGN KEY (citizen_id)
-REFERENCES citizen(citizen_id);
+REFERENCES citizen_details(citizen_id);
 ALTER TABLE certificate_application
 ADD CONSTRAINT fk_certificate
 FOREIGN KEY (certificate_id)
@@ -62,17 +62,17 @@ fee_paid, reference_number, certificate_id, office_id)
 VALUES
 (2002, 101, '2026-08-03', 'Testing', 'Submitted',
 30.00, 'TEST002', 999, 1);
-DELETE FROM citizen
+DELETE FROM citizen_details
 WHERE citizen_id = 101;
 DELETE FROM certificate_type
 WHERE certificate_type_id = 1;
-SELECT * from citizen;
+SELECT * from citizen_details;
 SELECT * from certificate_application;
 SELECT full_name
-FROM citizen
+FROM citizen_details
 ORDER BY full_name ASC;
 SELECT DISTINCT village_name
-FROM citizen;
+FROM citizen_details;
 SELECT DISTINCT certificate_name
 FROM certificate_type;
 SELECT DISTINCT office_name
@@ -81,7 +81,7 @@ SELECT *
 FROM certificate_application
 WHERE application_status = 'Pending';
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Ramapuram';
 SELECT *
 FROM certificate_application
@@ -95,14 +95,14 @@ JOIN panchayat_office po
 ON ca.office_id = po.office_id
 WHERE po.office_name = 'Nuzvid Panchayat Office';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
 ON ca.certificate_id = ct.certificate_type_id
 WHERE ct.certificate_name = 'Income Certificate';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -112,23 +112,23 @@ WHERE ct.certificate_name = 'Income Certificate'
 UNION
 
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
 ON ca.certificate_id = ct.certificate_type_id
 WHERE ct.certificate_name = 'Residence Certificate';
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Ramapuram'
 
 UNION
 
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Lakshmipuram';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -143,7 +143,7 @@ AND c.citizen_id IN (
     WHERE ct.certificate_name = 'Residence Certificate'
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 WHERE YEAR(ca.application_date) = 2025
@@ -154,7 +154,7 @@ AND c.citizen_id IN (
     WHERE YEAR(application_date) = 2026
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -182,19 +182,19 @@ fee_paid, reference_number, certificate_id, office_id)
 VALUES
 (3001, 999, '2026-08-03', 'Testing', 'Submitted',
 30.00, 'TEST3001', 1, 1);
-DELETE FROM citizen
+DELETE FROM citizen_details
 WHERE citizen_id = 101;
 SELECT full_name
-FROM citizen
+FROM citizen_details
 WHERE citizen_id IN (
     SELECT citizen_id
     FROM certificate_application
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name IN (
     SELECT c.village_name
-    FROM citizen c
+    FROM citizen_details c
     JOIN certificate_application ca
     ON c.citizen_id = ca.citizen_id
     JOIN certificate_type ct
@@ -202,7 +202,7 @@ WHERE village_name IN (
     WHERE ct.certificate_name = 'Income Certificate'
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE citizen_id NOT IN (
     SELECT citizen_id
     FROM certificate_application
@@ -214,7 +214,7 @@ WHERE office_id NOT IN (
     FROM certificate_application
 );
 SELECT *
-FROM citizen c
+FROM citizen_details c
 WHERE EXISTS (
     SELECT 1
     FROM certificate_application ca
@@ -228,7 +228,7 @@ WHERE EXISTS (
     WHERE ca.certificate_id = ct.certificate_type_id
 );
 SELECT *
-FROM citizen c
+FROM citizen_details c
 WHERE NOT EXISTS (
     SELECT 1
     FROM certificate_application ca
@@ -242,14 +242,14 @@ WHERE NOT EXISTS (
     WHERE ca.certificate_id = ct.certificate_type_id
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE date_of_birth > ANY (
     SELECT date_of_birth
-    FROM citizen
+    FROM citizen_details
     WHERE village_name = 'Ramapuram'
 );
 SELECT c.full_name, COUNT(*) AS total_applications
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 GROUP BY c.citizen_id, c.full_name
@@ -275,13 +275,13 @@ ON ct.certificate_type_id = ca.certificate_id
 GROUP BY ct.certificate_type_id, ct.certificate_name
 HAVING COUNT(*) > 5;
 SELECT DISTINCT village_name
-FROM citizen
+FROM citizen_details
 WHERE citizen_id NOT IN (
     SELECT citizen_id
     FROM certificate_application
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 WHERE NOT EXISTS (
     SELECT certificate_type_id
     FROM certificate_type ct
@@ -293,11 +293,11 @@ WHERE NOT EXISTS (
     )
 );USE gram_panchayat_db;
 SHOW TABLES;
-SELECT * FROM citizen;
+SELECT * FROM citizen_details;
 SELECT * FROM certificate_application;
 SELECT * FROM certificate_type;
 SELECT * FROM panchayat_office;
-DESC citizen;
+DESC citizen_details;
 DESC certificate_type;
 DESC panchayat_office;
 DESC certificate_application;
@@ -333,7 +333,7 @@ DROP COLUMN certificate_name;
 ALTER TABLE certificate_application
 ADD CONSTRAINT fk_citizen
 FOREIGN KEY (citizen_id)
-REFERENCES citizen(citizen_id);
+REFERENCES citizen_details(citizen_id);
 ALTER TABLE certificate_application
 ADD CONSTRAINT fk_certificate
 FOREIGN KEY (certificate_id)
@@ -355,17 +355,17 @@ fee_paid, reference_number, certificate_id, office_id)
 VALUES
 (2002, 101, '2026-08-03', 'Testing', 'Submitted',
 30.00, 'TEST002', 999, 1);
-DELETE FROM citizen
+DELETE FROM citizen_details
 WHERE citizen_id = 101;
 DELETE FROM certificate_type
 WHERE certificate_type_id = 1;
-SELECT * from citizen;
+SELECT * from citizen_details;
 SELECT * from certificate_application;
 SELECT full_name
-FROM citizen
+FROM citizen_details
 ORDER BY full_name ASC;
 SELECT DISTINCT village_name
-FROM citizen;
+FROM citizen_details;
 SELECT DISTINCT certificate_name
 FROM certificate_type;
 SELECT DISTINCT office_name
@@ -374,7 +374,7 @@ SELECT *
 FROM certificate_application
 WHERE application_status = 'Pending';
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Ramapuram';
 SELECT *
 FROM certificate_application
@@ -388,14 +388,14 @@ JOIN panchayat_office po
 ON ca.office_id = po.office_id
 WHERE po.office_name = 'Nuzvid Panchayat Office';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
 ON ca.certificate_id = ct.certificate_type_id
 WHERE ct.certificate_name = 'Income Certificate';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -405,23 +405,23 @@ WHERE ct.certificate_name = 'Income Certificate'
 UNION
 
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
 ON ca.certificate_id = ct.certificate_type_id
 WHERE ct.certificate_name = 'Residence Certificate';
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Ramapuram'
 
 UNION
 
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name = 'Lakshmipuram';
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -436,7 +436,7 @@ AND c.citizen_id IN (
     WHERE ct.certificate_name = 'Residence Certificate'
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 WHERE YEAR(ca.application_date) = 2025
@@ -447,7 +447,7 @@ AND c.citizen_id IN (
     WHERE YEAR(application_date) = 2026
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 JOIN certificate_type ct
@@ -475,19 +475,19 @@ fee_paid, reference_number, certificate_id, office_id)
 VALUES
 (3001, 999, '2026-08-03', 'Testing', 'Submitted',
 30.00, 'TEST3001', 1, 1);
-DELETE FROM citizen
+DELETE FROM citizen_details
 WHERE citizen_id = 101;
 SELECT full_name
-FROM citizen
+FROM citizen_details
 WHERE citizen_id IN (
     SELECT citizen_id
     FROM certificate_application
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE village_name IN (
     SELECT c.village_name
-    FROM citizen c
+    FROM citizen_details c
     JOIN certificate_application ca
     ON c.citizen_id = ca.citizen_id
     JOIN certificate_type ct
@@ -495,7 +495,7 @@ WHERE village_name IN (
     WHERE ct.certificate_name = 'Income Certificate'
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE citizen_id NOT IN (
     SELECT citizen_id
     FROM certificate_application
@@ -507,7 +507,7 @@ WHERE office_id NOT IN (
     FROM certificate_application
 );
 SELECT *
-FROM citizen c
+FROM citizen_details c
 WHERE EXISTS (
     SELECT 1
     FROM certificate_application ca
@@ -521,7 +521,7 @@ WHERE EXISTS (
     WHERE ca.certificate_id = ct.certificate_type_id
 );
 SELECT *
-FROM citizen c
+FROM citizen_details c
 WHERE NOT EXISTS (
     SELECT 1
     FROM certificate_application ca
@@ -535,14 +535,14 @@ WHERE NOT EXISTS (
     WHERE ca.certificate_id = ct.certificate_type_id
 );
 SELECT *
-FROM citizen
+FROM citizen_details
 WHERE date_of_birth > ANY (
     SELECT date_of_birth
-    FROM citizen
+    FROM citizen_details
     WHERE village_name = 'Ramapuram'
 );
 SELECT c.full_name, COUNT(*) AS total_applications
-FROM citizen c
+FROM citizen_details c
 JOIN certificate_application ca
 ON c.citizen_id = ca.citizen_id
 GROUP BY c.citizen_id, c.full_name
@@ -568,13 +568,13 @@ ON ct.certificate_type_id = ca.certificate_id
 GROUP BY ct.certificate_type_id, ct.certificate_name
 HAVING COUNT(*) > 5;
 SELECT DISTINCT village_name
-FROM citizen
+FROM citizen_details
 WHERE citizen_id NOT IN (
     SELECT citizen_id
     FROM certificate_application
 );
 SELECT c.full_name
-FROM citizen c
+FROM citizen_details c
 WHERE NOT EXISTS (
     SELECT certificate_type_id
     FROM certificate_type ct
